@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-text">
+        <h1 class="animate-up">Global Scam Map<br><span class="text-gradient">Real-Time Fraud Intelligence</span></h1>
+        <p class="subtitle animate-up delay-1">Visualize scam activity across regions. See where different types of fraud are most prevalent.</p>
+    </div>
+</section>
+
+<section class="scanner-section animate-up delay-2" style="padding: 20px;">
+    <div class="glass-panel" style="padding: 30px;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+            <!-- Map -->
+            <div id="map-container" style="height: 600px; border-radius: 10px; overflow: hidden; background: rgba(0, 0, 0, 0.3);">
+                <div id="map" style="width: 100%; height: 100%;"></div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-panel">
+                <h3><i class='bx bx-bar-chart-alt-2'></i> Scam Statistics</h3>
+                
+                <div class="stat-card">
+                    <h4>Total Reports</h4>
+                    <p class="stat-number" id="total-reports">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h4>Top Scam Type</h4>
+                    <p class="stat-text" id="top-scam-type">Loading...</p>
+                    <p class="stat-subtext" id="top-scam-count">-- reports</p>
+                </div>
+
+                <h4 style="margin-top: 20px;">Scam Types</h4>
+                <div id="scam-breakdown" style="margin-top: 15px;">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <h4 style="margin-top: 20px;">Sources</h4>
+                <div id="source-breakdown" style="margin-top: 15px;">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <a href="{{ url_for('index') }}" class="btn-primary" style="margin-top: 30px; width: 100%; text-align: center; display: block;">
+                    <i class='bx bx-shield'></i> Analyze Content
+                </a>
+            </div>
+        </div>
+
+        <!-- Information -->
+        <div style="margin-top: 40px; padding: 20px; background: rgba(0, 212, 255, 0.08); border-radius: 10px; border-left: 4px solid #00d4ff;">
+            <h4><i class='bx bx-info-circle'></i> About This Map</h4>
+            <p style="margin-top: 10px; color: #b0b0b0;">
+                This visualization shows reported scam incidents submitted by our users. The data helps identify emerging fraud trends and high-risk regions. 
+                Different colors represent different types of scams: Job frauds (red), Phishing (orange), Investment scams (yellow), and others (blue).
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Include Leaflet.js for maps -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style>
+.stats-panel {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    color: #e0e0e0;
+}
+
+.stat-card {
+    background: rgba(0, 212, 255, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 3px solid #00d4ff;
+}
+
+.stat-card h4 {
+    color: #00d4ff;
+    margin: 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: bold;
+    color: #00d4ff;
+    margin: 0;
+}
+
+.stat-text {
+    font-size: 16px;
+    color: #ffffff;
+    margin: 0;
+}
+
+.stat-subtext {
+    font-size: 12px;
+    color: #888;
+    margin: 5px 0 0 0;
+}
+
+.break-down-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    font-size: 13px;
+}
+
+.break-down-item:last-child {
+    border-bottom: none;
+}
+
+.break-down-label {
+    color: #b0b0b0;
+}
+
+.break-down-value {
+    color: #00d4ff;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    #map-container {
+        grid-column: 1 / -1;
+    }
+    
+    .stats-panel {
+        grid-column: 1 / -1;
+    }
+}
+</style>
+
+<script>
+// Initialize map
+const map = L.map('map').setView([20, 0], 2);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19,
+    backgroundColor: '#1a1a1a'
+}).addTo(map);
+
+// Color mapping for scam types
+const scamColors = {
+    'Fake Job Scam': '#FF6B6B',
+    'Phishing Email': '#FFA500',
+    'Investment Scam': '#FFD700',
+    'Loan Scam': '#FF8C00',
+    'Lottery Scam': '#FF69B4',
+    'Crypto Scam': '#9370DB',
+    'E-commerce Scam': '#4169E1',
+    'OTP Scam': '#00CED1',
+    'Suspicious Phone Number': '#FF1493',
+    'Suspicious Website': '#DC143C',
+    'Unknown Suspicious Activity': '#808080'
+};
+
+// Fetch and display statistics
+async function loadData() {
+    try {
+        // Load stats
+        const statsResponse = await fetch('/api/stats');
+        const statsData = await statsResponse.json();
+        
+        document.getElementById('total-reports').textContent = statsData.total_reports || 0;
+        
+        // Calculate top scam type
+        if (Object.keys(statsData.by_type).length > 0) {
+            const topScam = Object.entries(statsData.by_type).sort((a, b) => b[1] - a[1])[0];
+            document.getElementById('top-scam-type').textContent = topScam[0];
+            document.getElementById('top-scam-count').textContent = `${topScam[1]} reports`;
+        }
+        
+        // Display breakdown
+        const scamBreakdown = document.getElementById('scam-breakdown');
+        scamBreakdown.innerHTML = '';
+        Object.entries(statsData.by_type)
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([type, count]) => {
+                const div = document.createElement('div');
+                div.className = 'break-down-item';
+                div.innerHTML = `
+                    <span class="break-down-label">${type}</span>
+                    <span class="break-down-value">${count}</span>
+                `;
+                scamBreakdown.appendChild(div);
+            });
+        
+        const sourceBreakdown = document.getElementById('source-breakdown');
+        sourceBreakdown.innerHTML = '';
+        Object.entries(statsData.by_source)
+            .sort((a, b) => b[1] - a[1])
+            .forEach(([source, count]) => {
+                const div = document.createElement('div');
+                div.className = 'break-down-item';
+                div.innerHTML = `
+                    <span class="break-down-label">${source}</span>
+                    <span class="break-down-value">${count}</span>
+                `;
+                sourceBreakdown.appendChild(div);
+            });
+        
+        // Load map data
+        const mapResponse = await fetch('/api/map-data');
+        const mapData = await mapResponse.json();
+        
+        if (mapData.locations && mapData.locations.length > 0) {
+            mapData.locations.forEach(location => {
+                const color = scamColors[location.scam_type] || '#808080';
+                L.circleMarker([location.latitude, location.longitude], {
+                    radius: Math.min(Math.log(location.report_count + 1) * 5, 30),
+                    fillColor: color,
+                    color: color,
+                    weight: 2,
+                    opacity: 0.8,
+                    fillOpacity: 0.6
+                }).addTo(map).bindPopup(`
+                    <strong>${location.city}, ${location.country}</strong><br>
+                    Type: ${location.scam_type}<br>
+                    Reports: ${location.report_count}
+                `);
+            });
+        }
+        
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}
+
+// Load data on page load
+document.addEventListener('DOMContentLoaded', loadData);
+
+// Refresh data every 30 seconds
+setInterval(loadData, 30000);
+</script>
+{% endblock %}

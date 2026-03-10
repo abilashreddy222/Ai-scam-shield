@@ -1,0 +1,440 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-text">
+        <h1 class="animate-up">AI Scam Shield<br><span class="text-gradient">Universal Fraud Detection</span></h1>
+        <p class="subtitle animate-up delay-1">Protection against fake jobs, phishing, investment scams, loan fraud, and more. Analyze text, images, PDFs, URLs, phone numbers, and voice recordings with our advanced AI engine.</p>
+    </div>
+</section>
+
+<section class="scanner-section animate-up delay-2">
+    <div class="glass-panel scanner-panel">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="text-tab">
+                <i class='bx bx-text'></i> Text Analysis
+            </button>
+            <button class="tab-btn" data-tab="image-tab">
+                <i class='bx bx-image-add'></i> Screenshot OCR
+            </button>
+            <button class="tab-btn" data-tab="pdf-tab">
+                <i class='bx bx-file-pdf'></i> PDF Analyzer
+            </button>
+            <button class="tab-btn" data-tab="url-tab">
+                <i class='bx bx-link'></i> URL Checker
+            </button>
+            <button class="tab-btn" data-tab="phone-tab">
+                <i class='bx bx-phone'></i> Phone Analyzer
+            </button>
+            <button class="tab-btn" data-tab="voice-tab">
+                <i class='bx bx-microphone'></i> Voice Analyzer
+            </button>
+        </div>
+
+        <!-- TEXT ANALYSIS TAB -->
+        <div class="tab-content active" id="text-tab">
+            <form id="text-scan-form" class="scan-form">
+                <div class="form-group">
+                    <label for="recruiter-email">Email Address (Optional)</label>
+                    <input type="email" id="recruiter-email" placeholder="e.g. recruiter@company.com" class="glass-input">
+                </div>
+                <div class="form-group">
+                    <label for="job-description">Text Content <span class="required">*</span></label>
+                    <textarea id="job-description" rows="8"
+                        placeholder="Paste job descriptions, suspicious messages, investment offers, loan proposals, or any text you want to analyze..."
+                        class="glass-input required-input"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" id="analyze-btn">
+                    <span>Analyze Text</span>
+                    <i class='bx bx-bot'></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- IMAGE/SCREENSHOT TAB -->
+        <div class="tab-content" id="image-tab">
+            <form id="image-scan-form" class="scan-form">
+                <div class="upload-area" id="drop-zone-image">
+                    <i class='bx bx-cloud-upload upload-icon'></i>
+                    <h3>Drag & Drop Screenshot Here</h3>
+                    <p>or click to browse from device</p>
+                    <input type="file" id="screenshot-upload" accept="image/*" hidden>
+                </div>
+                <p class="file-name" id="selected-file-name-image"></p>
+                <button type="submit" class="btn-primary" id="analyze-img-btn" disabled>
+                    <span>Extract Text & Analyze (OCR)</span>
+                    <i class='bx bx-scan'></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- PDF ANALYSIS TAB -->
+        <div class="tab-content" id="pdf-tab">
+            <form id="pdf-scan-form" class="scan-form">
+                <div class="upload-area" id="drop-zone-pdf">
+                    <i class='bx bx-cloud-upload upload-icon'></i>
+                    <h3>Drag & Drop PDF Here</h3>
+                    <p>Analyze offer letters, contracts, internship letters, and documents</p>
+                    <input type="file" id="pdf-upload" accept=".pdf" hidden>
+                </div>
+                <p class="file-name" id="selected-file-name-pdf"></p>
+                <button type="submit" class="btn-primary" id="analyze-pdf-btn" disabled>
+                    <span>Analyze PDF Document</span>
+                    <i class='bx bx-file-pdf'></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- URL ANALYSIS TAB -->
+        <div class="tab-content" id="url-tab">
+            <form id="url-scan-form" class="scan-form">
+                <div class="form-group">
+                    <label for="url-input">Website URL <span class="required">*</span></label>
+                    <input type="url" id="url-input" placeholder="e.g. https://suspicious-website.com" class="glass-input required-input">
+                </div>
+                <button type="submit" class="btn-primary" id="analyze-url-btn">
+                    <span>Check URL for Phishing</span>
+                    <i class='bx bx-link'></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- PHONE ANALYSIS TAB -->
+        <div class="tab-content" id="phone-tab">
+            <form id="phone-scan-form" class="scan-form">
+                <div class="form-group">
+                    <label for="phone-input">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone-input" placeholder="e.g. +1-800-555-0123 or 8005550123" class="glass-input required-input">
+                </div>
+                <button type="submit" class="btn-primary" id="analyze-phone-btn">
+                    <span>Analyze Phone Number</span>
+                    <i class='bx bx-phone'></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- VOICE ANALYSIS TAB -->
+        <div class="tab-content" id="voice-tab">
+            <form id="voice-scan-form" class="scan-form">
+                <div class="upload-area" id="drop-zone-voice">
+                    <i class='bx bx-cloud-upload upload-icon'></i>
+                    <h3>Drag & Drop Audio File Here</h3>
+                    <p>Upload voice recordings of suspicious calls</p>
+                    <input type="file" id="voice-upload" accept="audio/*,.wav,.mp3,.aac,.m4a" hidden>
+                </div>
+                <p class="file-name" id="selected-file-name-voice"></p>
+                <button type="submit" class="btn-primary" id="analyze-voice-btn" disabled>
+                    <span>Transcribe & Analyze Voice</span>
+                    <i class='bx bx-microphone'></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-state hidden" id="loading-spinner">
+            <div class="spinner"></div>
+            <p class="loading-text" id="loading-text">Analyzing Content...</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="hidden" id="error-alert">
+            <div class="error-alert">
+                <i class='bx bx-error'></i>
+                <span id="error-message">An error occurred during analysis.</span>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-container hidden" id="results-panel">
+            <div class="risk-gauge">
+                <div class="score-circle" id="score-circle">
+                    <span id="risk-score">0</span>
+                    <small>Risk Score</small>
+                </div>
+                <div class="result-info">
+                    <h3 id="prediction-label" class="prediction-label">Analysis Result</h3>
+                    <p id="scam-type-text" class="scam-type-text">Scam Type: Unknown</p>
+                    <p id="confidence-text" class="confidence-text">Confidence: --</p>
+                </div>
+            </div>
+
+            <div class="analysis-details">
+                <h4><i class='bx bx-list-check'></i> Detection Reasons</h4>
+                <ul id="reasons-list" class="reasons-list">
+                    <!-- Reasons populated dynamically -->
+                </ul>
+
+                <div id="keywords-container" class="hidden">
+                    <h4><i class='bx bx-highlight'></i> Suspicious Keywords Found</h4>
+                    <div class="tags-container" id="keywords-tags">
+                        <!-- Tags populated dynamically -->
+                    </div>
+                </div>
+
+                <div id="ocr-text-container" class="hidden">
+                    <h4><i class='bx bx-file'></i> Extracted Text</h4>
+                    <p id="ocr-text" class="extracted-text-box"></p>
+                </div>
+
+                <div id="transcription-container" class="hidden">
+                    <h4><i class='bx bx-message'></i> Voice Transcription</h4>
+                    <p id="transcription-text" class="extracted-text-box"></p>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-secondary" id="reset-btn"><i class='bx bx-refresh'></i> Analyze Another</button>
+                <a href="{{ url_for('assistant') }}" class="btn-info"><i class='bx bx-chat'></i> Ask AI Assistant</a>
+                <a href="{{ url_for('report') }}" class="btn-danger"><i class='bx bx-error-circle'></i> Report This</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+// Tab switching functionality
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const tabId = this.dataset.tab;
+        
+        // Remove active class from all tabs and contents
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // Add active class to clicked tab and corresponding content
+        this.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    });
+});
+
+// File upload handlers
+const setupFileUpload = (dropZoneId, inputId, fileNameId, submitButtonId) => {
+    const dropZone = document.getElementById(dropZoneId);
+    const fileInput = document.getElementById(inputId);
+    const fileName = document.getElementById(fileNameId);
+    const submitBtn = document.getElementById(submitButtonId);
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#00d4ff';
+        dropZone.style.backgroundColor = 'rgba(0, 212, 255, 0.1)';
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = '';
+        dropZone.style.backgroundColor = '';
+    });
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.style.borderColor = '';
+        dropZone.style.backgroundColor = '';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            fileName.textContent = files[0].name;
+            submitBtn.disabled = false;
+        }
+    });
+    
+    fileInput.addEventListener('change', e => {
+        if (e.target.files.length > 0) {
+            fileName.textContent = e.target.files[0].name;
+            submitBtn.disabled = false;
+        }
+    });
+};
+
+setupFileUpload('drop-zone-image', 'screenshot-upload', 'selected-file-name-image', 'analyze-img-btn');
+setupFileUpload('drop-zone-pdf', 'pdf-upload', 'selected-file-name-pdf', 'analyze-pdf-btn');
+setupFileUpload('drop-zone-voice', 'voice-upload', 'selected-file-name-voice', 'analyze-voice-btn');
+
+// Form submission handlers
+document.getElementById('text-scan-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = document.getElementById('job-description').value;
+    const email = document.getElementById('recruiter-email').value;
+    if (!text.trim()) {
+        alert('Please enter text to analyze');
+        return;
+    }
+    await analyzeContent('/api/analyze/text', { text, email });
+});
+
+document.getElementById('image-scan-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const file = document.getElementById('screenshot-upload').files[0];
+    if (!file) {
+        alert('Please select an image');
+        return;
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    await analyzeFile('/api/analyze/image', formData);
+});
+
+document.getElementById('pdf-scan-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const file = document.getElementById('pdf-upload').files[0];
+    if (!file) {
+        alert('Please select a PDF');
+        return;
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    await analyzeFile('/api/analyze/pdf', formData);
+});
+
+document.getElementById('url-scan-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('url-input').value;
+    if (!url.trim()) {
+        alert('Please enter a URL');
+        return;
+    }
+    await analyzeContent('/api/analyze/url', { url });
+});
+
+document.getElementById('phone-scan-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const phone = document.getElementById('phone-input').value;
+    if (!phone.trim()) {
+        alert('Please enter a phone number');
+        return;
+    }
+    await analyzeContent('/api/analyze/phone', { phone });
+});
+
+document.getElementById('voice-scan-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const file = document.getElementById('voice-upload').files[0];
+    if (!file) {
+        alert('Please select an audio file');
+        return;
+    }
+    const formData = new FormData();
+    formData.append('file', file);
+    await analyzeFile('/api/analyze/voice', formData);
+});
+
+// Shared analysis functions
+async function analyzeContent(endpoint, data) {
+    const spinner = document.getElementById('loading-spinner');
+    const errorAlert = document.getElementById('error-alert');
+    const resultsPanel = document.getElementById('results-panel');
+   
+    spinner.classList.remove('hidden');
+    errorAlert.classList.add('hidden');
+    resultsPanel.classList.add('hidden');
+    
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.error || 'Analysis failed');
+        }
+        
+        displayResults(result);
+        spinner.classList.add('hidden');
+        resultsPanel.classList.remove('hidden');
+    } catch (error) {
+        spinner.classList.add('hidden');
+        document.getElementById('error-message').textContent = error.message;
+        errorAlert.classList.remove('hidden');
+    }
+}
+
+async function analyzeFile(endpoint, formData) {
+    const spinner = document.getElementById('loading-spinner');
+    const errorAlert = document.getElementById('error-alert');
+    const resultsPanel = document.getElementById('results-panel');
+    
+    spinner.classList.remove('hidden');
+    errorAlert.classList.add('hidden');
+    resultsPanel.classList.add('hidden');
+    
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(result.error || 'Analysis failed');
+        }
+        
+        displayResults(result);
+        spinner.classList.add('hidden');
+        resultsPanel.classList.remove('hidden');
+    } catch (error) {
+        spinner.classList.add('hidden');
+        document.getElementById('error-message').textContent = error.message;
+        errorAlert.classList.remove('hidden');
+    }
+}
+
+function displayResults(result) {
+    const riskScore = result.risk_score || 0;
+    const scamType = result.scam_type || result.prediction || 'Unknown';
+    
+    // Update risk score
+    document.getElementById('risk-score').textContent = riskScore;
+    document.getElementById('score-circle').className = `score-circle ${riskScore > 70 ? 'high-risk' : riskScore > 40 ? 'medium-risk' : 'low-risk'}`;
+    
+    // Update prediction
+    document.getElementById('prediction-label').textContent = riskScore > 70 ? 'LIKELY SCAM' : riskScore > 40 ? 'SUSPICIOUS' : 'APPEARS SAFE';
+    document.getElementById('scam-type-text').textContent = `Scam Type: ${scamType}`;
+    document.getElementById('confidence-text').textContent = `Confidence: ${result.confidence || result.confidence_score || 'N/A'}%`;
+    
+    // Update reasons
+    const reasonsList = document.getElementById('reasons-list');
+    reasonsList.innerHTML = '';
+    (result.reasons || []).forEach(reason => {
+        const li = document.createElement('li');
+        li.textContent = reason;
+        reasonsList.appendChild(li);
+    });
+    
+    // Update keywords
+    if (result.keywords_found && result.keywords_found.length > 0) {
+        document.getElementById('keywords-container').classList.remove('hidden');
+        const tagsContainer = document.getElementById('keywords-tags');
+        tagsContainer.innerHTML = '';
+        result.keywords_found.forEach(kw => {
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = kw;
+            tagsContainer.appendChild(tag);
+        });
+    }
+    
+    // Update extracted text
+    if (result.extracted_text) {
+        document.getElementById('ocr-text-container').classList.remove('hidden');
+        document.getElementById('ocr-text').textContent = result.extracted_text;
+    } else {
+        document.getElementById('ocr-text-container').classList.add('hidden');
+    }
+    
+    // Update transcription
+    if (result.transcription) {
+        document.getElementById('transcription-container').classList.remove('hidden');
+        document.getElementById('transcription-text').textContent = result.transcription;
+    } else {
+        document.getElementById('transcription-container').classList.add('hidden');
+    }
+}
+
+// Reset button
+document.getElementById('reset-btn')?.addEventListener('click', () => {
+    location.reload();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - DetectScam.ai{% endblock %}
+
+{% block content %}
+<section class="admin-header animate-up">
+    <h2><i class='bx bx-pie-chart-alt-2'></i> Security & Admin Dashboard</h2>
+    <p>Monitor system scans, manage rules, and review user reports.</p>
+</section>
+
+<section class="admin-grid animate-up delay-1">
+    <!-- Stats Cards -->
+    <div class="glass-panel stat-card">
+        <i class='bx bx-shield-x text-gradient icon-xl'></i>
+        <div class="stat-info">
+            <h3>{{ reports|length }}</h3>
+            <p>Total Reported Scams</p>
+        </div>
+    </div>
+
+    <div class="glass-panel stat-card">
+        <i class='bx bx-radar text-gradient icon-xl'></i>
+        <div class="stat-info">
+            <h3>{{ keywords|length }}</h3>
+            <p>Active Detection Rules</p>
+        </div>
+    </div>
+</section>
+
+<section class="admin-dashboard animate-up delay-2">
+    <div class="dashboard-cols">
+        <!-- Detection Rules -->
+        <div class="glass-panel keywords-panel">
+            <h3><i class='bx bx-list-ol'></i> Scam Keywords & Rules</h3>
+            <div class="tags-container" style="margin-top: 15px;">
+                {% for kw in keywords %}
+                <span class="tag keyword-tag">
+                    {{ kw.keyword }}
+                    <i class='bx bx-x delete-kw-btn' data-id="{{ kw.id }}" style="cursor: pointer; margin-left: 5px;"
+                        title="Remove this keyword"></i>
+                </span>
+                {% endfor %}
+            </div>
+
+            <form id="add-keyword-form" class="mt-20">
+                <div class="input-group">
+                    <input type="text" placeholder="Add new keyword rule..." class="glass-input" id="new-keyword">
+                    <button type="submit" class="btn-primary" style="padding: 10px 15px;"><i
+                            class='bx bx-plus'></i></button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Reported Log -->
+        <div class="glass-panel reports-panel">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3><i class='bx bx-history'></i> Recent User Reports</h3>
+                <div>
+                    <a href="{{ url_for('download_reports_csv') }}" class="btn-info"
+                        style="padding: 6px 12px; font-size: 0.9rem; margin-right: 0.5rem;">
+                        <i class='bx bx-download'></i> CSV
+                    </a>
+                    <button id="clear-all-reports-btn" class="btn-danger" style="padding: 6px 12px; font-size: 0.9rem;">
+                        <i class='bx bx-trash'></i> Clear All
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container mt-20">
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in reports %}
+                        <tr>
+                            <td>{{ report.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ report.email[:20] if report.email else 'N/A' }}</td>
+                            <td>
+                                <span class="badge 
+                                    {% if report.risk_score > 70 %}badge-danger
+                                    {% elif report.risk_score > 40 %}badge-warning
+                                    {% else %}badge-info{% endif %}">
+                                    {{ report.scam_type }}
+                                </span>
+                            </td>
+                            <td>{{ report.description[:30] if report.description else 'N/A' }}...</td>
+                            <td>
+                                <button class="delete-report-btn" data-id="{{ report.id }}"
+                                    style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:1.2rem;"
+                                    title="Delete Report">
+                                    <i class='bx bx-trash'></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center;">No reports submitted yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

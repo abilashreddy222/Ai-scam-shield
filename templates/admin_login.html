@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Login - DetectScam.ai{% endblock %}
+
+{% block content %}
+<section class="hero-section animate-up">
+    <h1><span class="text-gradient">Admin Portal</span></h1>
+    <p class="subtitle">Please authenticate to continue.</p>
+</section>
+
+<section class="scanner-panel animate-up delay-1" style="max-width: 400px; margin: 0 auto;">
+    <div class="glass-panel">
+        <form method="POST" action="{{ url_for('admin_login') }}">
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="error-alert" style="margin-bottom: 1rem;">
+                <i class='bx bx-error-circle'></i> {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="glass-input" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="glass-input" required
+                    autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">
+                <i class='bx bx-log-in'></i> Login
+            </button>
+        </form>
+    </div>
+</section>
+{% endblock %}

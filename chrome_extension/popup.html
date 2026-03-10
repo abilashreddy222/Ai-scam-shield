@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Scam Shield</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            width: 320px;
+            padding: 15px;
+            margin: 0;
+            background-color: #f8f9fc;
+            color: #1a1c2c;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .header h3 {
+            margin: 0;
+            color: #4361ee;
+            font-size: 16px;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .risk-high {
+            border-left: 4px solid #ef476f;
+        }
+
+        .risk-medium {
+            border-left: 4px solid #ffd166;
+        }
+
+        .risk-low {
+            border-left: 4px solid #06d6a0;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .badge-high {
+            background: #ef476f;
+            color: white;
+        }
+
+        .badge-medium {
+            background: #ffd166;
+            color: #1a1c2c;
+        }
+
+        .badge-low {
+            background: #06d6a0;
+            color: white;
+        }
+
+        h4 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+        }
+
+        p {
+            margin: 0;
+            font-size: 12px;
+            color: #64748b;
+            word-break: break-all;
+        }
+
+        .reasons {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #e2e8f0;
+        }
+
+        .reasons ul {
+            margin: 5px 0 0 0;
+            padding-left: 15px;
+            font-size: 11px;
+            color: #475569;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #3a0ca3;
+        }
+
+        #api-error {
+            color: #ef476f;
+            font-size: 12px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h3 id="app-title">🛡️ AI Scam Shield</h3>
+    </div>
+
+    <button id="scan-btn" class="btn">Scan Current Page</button>
+
+    <div id="loading" class="loader">
+        <p>Analyzing URL intelligence...</p>
+    </div>
+
+    <div id="error-msg" id="api-error"></div>
+
+    <div id="result-card" class="status-card">
+        <div id="risk-badge" class="risk-badge">Analyzing...</div>
+        <h4 id="scam-type">Site Status</h4>
+        <p id="current-url">...</p>
+
+        <div class="reasons" id="reasons-container" style="display: none;">
+            <strong>Detection Reasons:</strong>
+            <ul id="reasons-list"></ul>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

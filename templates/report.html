@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Report Scam - DetectScam.ai{% endblock %}
+
+{% block content %}
+<section class="report-section animate-up">
+    <div class="glass-panel report-panel">
+        <h2><i class='bx bx-error-circle text-gradient'></i> Report a Fraudulent Job</h2>
+        <p class="subtitle">Help the community by reporting fake jobs. Our AI will learn from your submission.</p>
+
+        <form id="report-form" class="scan-form">
+            <div class="form-group">
+                <label for="report-email">Recruiter Email / Contact (if any)</label>
+                <input type="email" id="report-email" class="glass-input" placeholder="e.g. scammer@gmail.com">
+            </div>
+
+            <div class="form-group">
+                <label for="report-text">Job Description / Message <span class="required">*</span></label>
+                <textarea id="report-text" rows="5" class="glass-input required-input" required
+                    placeholder="Paste the suspicious content..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="report-reason">Why do you think this is a scam? <span class="required">*</span></label>
+                <textarea id="report-reason" rows="3" class="glass-input required-input" required
+                    placeholder="e.g. They asked for a joining fee..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="report-result">AI Prediction Result (from scanner)</label>
+                <select id="report-result" class="glass-input">
+                    <option value="Likely Scam">Likely Scam</option>
+                    <option value="Suspicious Job">Suspicious Job</option>
+                    <option value="Legitimate Job">Legitimate Job</option>
+                    <option value="Unknown" selected>Unknown / Unscanned</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-danger">
+                <span>Submit Report to Database</span>
+                <i class='bx bx-send'></i>
+            </button>
+        </form>
+
+        <div id="report-success" class="hidden success-msg">
+            <i class='bx bx-check-circle'></i> Report submitted successfully! Thank you for contributing.
+        </div>
+    </div>
+</section>
+{% endblock %}

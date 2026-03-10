@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description"
+        content="AI Scam Shield - Universal Fraud Detection System. Protect yourself from scams with advanced AI analysis.">
+    <meta name="theme-color" content="#0f172a">
+    <title>{% block title %}AI Scam Shield - Universal Fraud Detection{% endblock %}</title>
+    <!-- Modern Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons for modern icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Background Elements for Glassmorphism Context -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">
+                <i class='bx bx-shield-check'></i> <span>Scam Shield</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">
+                        <i class='bx bx-search'></i> Analyze
+                    </a>
+                </li>
+                <li><a href="{{ url_for('assistant') }}"
+                        class="{% if request.endpoint == 'assistant' %}active{% endif %}">
+                        <i class='bx bx-chat'></i> Assistant
+                    </a>
+                </li>
+                <li><a href="{{ url_for('scam_map') }}"
+                        class="{% if request.endpoint == 'scam_map' %}active{% endif %}">
+                        <i class='bx bx-map'></i> Map
+                    </a>
+                </li>
+                <li><a href="{{ url_for('report') }}" class="{% if request.endpoint == 'report' %}active{% endif %}">
+                        <i class='bx bx-error-circle'></i> Report
+                    </a>
+                </li>
+                <li><a href="{{ url_for('admin') }}" class="{% if request.endpoint == 'admin' %}active{% endif %}">
+                        <i class='bx bx-cog'></i> Admin
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 AI Scam Shield | Advanced Fraud Detection System | Protecting Users Worldwide</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

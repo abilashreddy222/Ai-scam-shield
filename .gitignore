@@ -1,0 +1,47 @@
+# Environments
+venv/
+env/
+.env
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Database
+instance/
+*.db
+*.sqlite3
+
+# Logs
+*.log
+test_results.txt
+test_results2.txt
+test_results3.txt
+output.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db

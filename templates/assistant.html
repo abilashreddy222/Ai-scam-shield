@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-text">
+        <h1 class="animate-up">AI Scam Assistant<br><span class="text-gradient">Get Expert Fraud Advice</span></h1>
+        <p class="subtitle animate-up delay-1">Ask our AI assistant anything about scam identification, prevention tips, and fraud awareness. Get instant expert guidance.</p>
+    </div>
+</section>
+
+<section class="scanner-section animate-up delay-2">
+    <div class="glass-panel scanner-panel" style="max-width: 900px; margin: 0 auto;">
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        <h4>Welcome to AI Scam Shield Assistant! 👋</h4>
+                        <p>I'm here to help you learn about different types of scams and how to protect yourself. Ask me about:</p>
+                        <ul>
+                            <li>💼 Job scams and recruitment fraud</li>
+                            <li>📧 Phishing and email scams</li>
+                            <li>💰 Investment and crypto scams</li>
+                            <li>🏦 Loan and banking fraud</li>
+                            <li>🎁 Lottery and prize scams</li>
+                            <li>🛍️ E-commerce and fake products</li>
+                            <li>📱 OTP and mobile fraud</li>
+                            <li>🔐 Password and identity theft</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>Example questions:</strong></p>
+                        <p>"How do I identify a fake job offer?"</p>
+                        <p>"What are signs of a phishing email?"</p>
+                        <p>"Is this cryptocurrency investment safe?"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <form id="chat-form" class="chat-form">
+                    <input 
+                        type="text" 
+                        id="chat-input" 
+                        placeholder="Ask me anything about scams and fraud prevention..." 
+                        class="glass-input chat-input"
+                        autocomplete="off">
+                    <button type="submit" class="btn-primary chat-submit">
+                        <i class='bx bx-send'></i> Send
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="info-section" style="margin-top: 40px;">
+            <h3><i class='bx bx-info-circle'></i> Quick Scam Recognition Guide</h3>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>🚩 Common Red Flags</h4>
+                    <ul>
+                        <li>Requests for upfront payment</li>
+                        <li>Guaranteed returns or profits</li>
+                        <li>Urgency and pressure tactics</li>
+                        <li>Too good to be true offers</li>
+                        <li>Requests for personal info</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4>🛡️ Protection Measures</h4>
+                    <ul>
+                        <li>Verify directly with official websites</li>
+                        <li>Never share passwords or OTPs</li>
+                        <li>Check sender email addresses</li>
+                        <li>Research companies before applying</li>
+                        <li>Ask questions when unsure</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4>📞 What To Do If Scammed</h4>
+                    <ul>
+                        <li>Stop all contact immediately</li>
+                        <li>Report to authorities</li>
+                        <li>Change all passwords</li>
+                        <li>Monitor financial accounts</li>
+                        <li>Report to the platform</li>
+                    </ul>
+                </div>
+
+                <div class="tip-card">
+                    <h4>🔍 Verification Steps</h4>
+                    <ul>
+                        <li>Visit official company website</li>
+                        <li>Call verified phone numbers</li>
+                        <li>Check domain age & SSL cert</li>
+                        <li>Look for contact info</li>
+                        <li>Search for company reviews</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 10px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bot-message {
+    justify-content: flex-start;
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
+
+.bot-message .message-content {
+    background: rgba(0, 212, 255, 0.15);
+    border-left: 3px solid #00d4ff;
+    color: #e0e0e0;
+}
+
+.user-message .message-content {
+    background: rgba(0, 212, 255, 0.25);
+    border-right: 3px solid #00d4ff;
+    color: #ffffff;
+}
+
+.chat-form {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: #00d4ff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chat-submit {
+    padding: 12px 24px;
+    white-space: nowrap;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.tip-card {
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    color: #e0e0e0;
+}
+
+.tip-card h4 {
+    color: #00d4ff;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.tip-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tip-card li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    font-size: 14px;
+}
+
+.tip-card li:last-child {
+    border-bottom: none;
+}
+</style>
+
+<script>
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatMessages = document.getElementById('chat-messages');
+
+chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message to chat
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.className = 'message user-message';
+    userMessageDiv.innerHTML = `<div class="message-content">${escapeHtml(message)}</div>`;
+    chatMessages.appendChild(userMessageDiv);
+    
+    chatInput.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+        });
+        
+        const data = await response.json();
+        
+        // Add bot response
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'message bot-message';
+        botMessageDiv.innerHTML = `<div class="message-content">${escapeHtml(data.response)}</div>`;
+        chatMessages.appendChild(botMessageDiv);
+        
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    } catch (error) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'message bot-message';
+        errorDiv.innerHTML = `<div class="message-content">Sorry, I encountered an error. Please try again.</div>`;
+        chatMessages.appendChild(errorDiv);
+    }
+});
+
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+</script>
+{% endblock %}
