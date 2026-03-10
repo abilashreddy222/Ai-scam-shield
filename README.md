@@ -298,7 +298,7 @@ You are free to use, modify, and distribute this project as long as credit is gi
 
 **Vanam Abilash Reddy**  
 B.Tech Computer Science  
-AI & Cybersecurity Enthusiast  
+AI Enthusiast  
 
 GitHub:  
 https://github.com/abilashreddy222
